@@ -1,6 +1,6 @@
 # azmolndal
 
-extensions for visual studio code
+extensions for visual studio code:
 
 ARM template viewer
 
