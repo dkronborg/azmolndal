@@ -1,0 +1,28 @@
+az account set --subscription Subscription03
+az group create --name student08-test-cli --location westeurope
+az network vnet create --name virtnet-2 --resource-group student08-test-cli --subnet-name default
+-från powershell-
+Install-Module AzureADPreview
+Connect-AzureAD -TenantDomain codicse,onmicrosoft.com
+Get-AzureADUser -Filter "DisplayName eq '90dankro'"
+--
+az role assignment create --assignee 47d64675-3c3e-4a86-b21f-908896d4917e --role "Reader" --resource-group "student08-test-cli"
+
+
+New-AzResourceGroup -Name student08-test-arm -Location norwayeast
+New-AzResourceGroupDeployment -ResourceGroupName student08-test-arm -TemplateFile ./azuredeploy.json -TemplateParameterFile ./azuredeploy.parameters.json
+
+
+
+logga in powershell:
+Connect-AzAccount
+Select-AzSubscription Subscription03
+
+ny resursgrupp och ett storage account:
+New-AzResourceGroupDeployment -ResourceGroupName student08-test-arm -TemplateFile .\azuredeploy2.json
+
+
+
+
+
+
