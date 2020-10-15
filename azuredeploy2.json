@@ -1,0 +1,64 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2018-05-01/subscriptionDeploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    // "rgName": {
+    //   "type": "string",
+    //   "defaultValue": "student08-test-arm"
+    // },
+    // "rgLocation": {
+    //   "type": "string",
+    //   "defaultValue": "norwayeast"
+    // },
+    // "storagePrefix": {
+    //   "type": "string",
+    //   "maxLength": 11,
+    //   "defaultValue": "storpre"
+    // }
+  },
+  "variables": {
+    "storageName": "[concat('storpre', uniqueString(subscription().id, 'student08-test-arm'))]"
+  },
+  "resources": [
+    {
+      "type": "Microsoft.Resources/resourceGroups",
+      "apiVersion": "2020-06-01",
+      "name": "student08-test-arm",
+      "location": "northeurope",
+      "properties": {}
+    },
+    {
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2020-06-01",
+      "name": "storageDeployment",
+      "resourceGroup": "student08-test-arm",
+      "dependsOn": [
+        "[resourceId('Microsoft.Resources/resourceGroups/', 'student08-test-arm')]"
+      ],
+      "properties": {
+        "mode": "Incremental",
+        "template": {
+          "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+          "contentVersion": "1.0.0.0",
+          "parameters": {},
+          "variables": {},
+          "resources": [
+            {
+              "type": "Microsoft.Storage/storageAccounts",
+              "apiVersion": "2019-06-01",
+              "name": "[variables('storageName')]",
+              "location": "northeurope",
+              "sku": {
+                "name": "Standard_LRS"
+              },
+              "kind": "StorageV2"
+            }
+          ],
+          "outputs": {}
+        }
+      }
+    }
+  ],
+  "outputs": {}
+}
+
