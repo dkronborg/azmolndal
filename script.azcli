@@ -1,0 +1,1 @@
+az deployment group validate --resource-group student08-onpremise-arm --template-file onpremiseNSG.json
