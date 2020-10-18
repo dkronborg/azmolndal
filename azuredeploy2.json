@@ -15,6 +15,7 @@
     //   "maxLength": 11,
     //   "defaultValue": "storpre"
     // }
+    //this is a new comment
   },
   "variables": {
     "storageName": "[concat('storpre', uniqueString(subscription().id, 'student08-test-arm'))]"
