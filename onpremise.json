@@ -25,7 +25,7 @@
                         "properties": {
                             "addressPrefix": "10.4.1.0/24",
                             "networkSecurityGroup": {
-                                "id": "webserverNsg",
+                                "name": "webserverNsg",
                                 "type": "Microsoft.Network/networkSecurityGroups",
                                 "apiVersion": "2019-11-01",
                                 "location": "[resourceGroup().location]",
@@ -168,8 +168,9 @@
                         "name": "clientSubnet",
                         "properties": {
                             "addressPrefix": "10.4.8.0/24",
-                            "networkSecurityGroup": {
-                                "id": "clientsNsg",
+                            "networkSecurityGroup": 
+                            {
+                                "name": "clientsNsg",
                                 "type": "Microsoft.Network/networkSecurityGroups",
                                 "apiVersion": "2019-11-01",
                                 "location": "[resourceGroup().location]",
