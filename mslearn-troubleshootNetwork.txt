@@ -1,0 +1,81 @@
+//https://docs.microsoft.com/en-us/learn/modules/troubleshoot-azure-network-infrastructure/3-exercise-troubleshoot-networking-with-network-watcher
+
+rg=mslearn-troubleshoot
+
+az group create --name $rg --location westeurope
+
+az network vnet create \
+    --resource-group $rg \
+    --name MyVNet1 \
+    --address-prefix 10.10.0.0/16 \
+    --subnet-name FrontendSubnet \
+    --subnet-prefix 10.10.1.0/24 \
+    --location westeurope
+
+az vm create \
+    --resource-group $rg \
+    --no-wait \
+    --name FrontendVM \
+    --location westeurope \
+    --vnet-name MyVNet1 \
+    --subnet FrontendSubnet \
+    --image Win2012R2Datacenter \
+    --admin-username azureuser \
+    --admin-password azureuser123!
+
+az network vnet subnet create \
+    --address-prefixes 10.10.2.0/24 \
+    --name BackendSubnet \
+    --resource-group $rg \
+    --vnet-name MyVNet1
+
+
+az vm create \
+    --resource-group $rg \
+    --no-wait \
+    --name BackendVM \
+    --location westeurope \
+    --vnet-name MyVNet1 \
+    --subnet BackendSubnet \
+    --image Win2012R2Datacenter \
+    --admin-username azureuser \
+    --admin-password <password>
+
+az network nsg create \
+    --name MyNsg \
+    --resource-group $rg \
+    --location westeurope
+
+az network nsg rule create \
+    --resource-group $rg \
+    --name MyNSGRule \
+    --nsg-name MyNsg \
+    --priority 4096 \
+    --source-address-prefixes '*' \
+    --source-port-ranges 80 443 3389 \
+    --destination-address-prefixes '*' \
+    --destination-port-ranges 80 443 3389 \
+    --access Deny \
+    --protocol TCP \
+    --description "Deny from specific IP address ranges on 80, 443 and 3389."
+
+az network vnet subnet update \
+    --resource-group $rg \
+    --name BackendSubnet \
+    --vnet-name MyVNet1 \
+    --network-security-group MyNsg
+
+az network watcher configure \
+    --resource-group $rg \
+    --locations westeurope \
+    --enabled
+
+
+
+
+
+
+
+
+
+
