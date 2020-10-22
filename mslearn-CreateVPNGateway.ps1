@@ -58,7 +58,7 @@ Add-AzVpnClientRootCertificate -VpnClientRootCertificateName $P2SRootCertName -V
 $profile = New-AzVpnClientConfiguration -ResourceGroupName $ResourceGroup -Name $GWName -AuthenticationMethod "EapTls"
 $profile.VPNProfileSASUrl
 
-https://nfvprodsuppbl.blob.core.windows.net/vpnprofileimmutable/1ba10077-b388-4ac9-8db5-1e46e55af7d0/vpnprofile/b5537695-e853-4e3c-99d9-1e0d92c4dd4e/vpnclientconfiguration.zip?sv=2018-03-28&sr=b&sig=ZgwfhkuiOQNJ9t4o0cZYZMCDYlZV2M1BXY0B8sOS1kA=&st=2020-10-18T18:59:41Z&se=2020-10-18T19:59:41Z&sp=r&fileExtension=.zip
+#https://nfvprodsuppbl.blob.core.windows.net/vpnprofileimmutable/1ba10077-b388-4ac9-8db5-1e46e55af7d0/vpnprofile/b5537695-e853-4e3c-99d9-1e0d92c4dd4e/vpnclientconfiguration.zip?sv=2018-03-28&sr=b&sig=ZgwfhkuiOQNJ9t4o0cZYZMCDYlZV2M1BXY0B8sOS1kA=&st=2020-10-18T18:59:41Z&se=2020-10-18T19:59:41Z&sp=r&fileExtension=.zip
 
 
 
