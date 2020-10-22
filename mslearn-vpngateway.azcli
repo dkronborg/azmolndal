@@ -1,0 +1,148 @@
+az network vnet create \
+    --resource-group learn-e6efc855-2ce3-4766-a019-b0e869c9628a \
+    --name Azure-VNet-1 \
+    --address-prefix 10.0.0.0/16 \
+    --subnet-name Services \
+    --subnet-prefix 10.0.0.0/24
+
+az network vnet subnet create \
+    --resource-group learn-e6efc855-2ce3-4766-a019-b0e869c9628a \
+    --vnet-name Azure-VNet-1 \
+    --address-prefix 10.0.255.0/27 \
+    --name GatewaySubnet
+
+az network local-gateway create \
+    --resource-group learn-e6efc855-2ce3-4766-a019-b0e869c9628a \
+    --gateway-ip-address 94.0.252.160 \
+    --name LNG-HQ-Network \
+    --local-address-prefixes 172.16.0.0/16
+
+
+az network vnet create \
+    --resource-group learn-e6efc855-2ce3-4766-a019-b0e869c9628a \
+    --name HQ-Network \
+    --address-prefix 172.16.0.0/16 \
+    --subnet-name Applications \
+    --subnet-prefix 172.16.0.0/24
+
+az network vnet subnet create \
+    --resource-group learn-e6efc855-2ce3-4766-a019-b0e869c9628a \
+    --address-prefix 172.16.255.0/27 \
+    --name GatewaySubnet \
+    --vnet-name HQ-Network
+
+az network local-gateway create \
+    --resource-group learn-e6efc855-2ce3-4766-a019-b0e869c9628a \
+    --gateway-ip-address 94.0.252.160 \
+    --name LNG-Azure-VNet-1 \
+    --local-address-prefixes 10.0.0.0/16
+
+az network vnet list --output table
+
+az network local-gateway list \
+    --resource-group learn-e6efc855-2ce3-4766-a019-b0e869c9628a \
+    --output table
+
+
+#azure vpn gateway
+az network public-ip create \
+    --resource-group learn-e6efc855-2ce3-4766-a019-b0e869c9628a \
+    --name PIP-VNG-Azure-VNet-1 \
+    --allocation-method Dynamic
+
+az network vnet-gateway create \
+    --resource-group learn-e6efc855-2ce3-4766-a019-b0e869c9628a \
+    --name VNG-Azure-VNet-1 \
+    --public-ip-address PIP-VNG-Azure-VNet-1 \
+    --vnet Azure-VNet-1 \
+    --gateway-type Vpn \
+    --vpn-type RouteBased \
+    --sku VpnGw1 \
+    --no-wait
+
+#onprem vpn gateway
+
+az network public-ip create \
+    --resource-group learn-e6efc855-2ce3-4766-a019-b0e869c9628a \
+    --name PIP-VNG-HQ-Network \
+    --allocation-method Dynamic
+
+az network vnet-gateway create \
+    --resource-group learn-e6efc855-2ce3-4766-a019-b0e869c9628a \
+    --name VNG-HQ-Network \
+    --public-ip-address PIP-VNG-HQ-Network \
+    --vnet HQ-Network \
+    --gateway-type Vpn \
+    --vpn-type RouteBased \
+    --sku VpnGw1 \
+    --no-wait
+
+
+
+#update local network gateway ip
+az network vnet-gateway list \
+    --resource-group learn-e6efc855-2ce3-4766-a019-b0e869c9628a \
+    --query "[?provisioningState=='Succeeded']" \
+    --output table
+
+PIPVNGAZUREVNET1=$(az network public-ip show \
+    --resource-group learn-e6efc855-2ce3-4766-a019-b0e869c9628a \
+    --name PIP-VNG-Azure-VNet-1 \
+    --query "[ipAddress]" \
+    --output tsv)
+
+az network local-gateway update \
+    --resource-group learn-e6efc855-2ce3-4766-a019-b0e869c9628a \
+    --name LNG-Azure-VNet-1 \
+    --gateway-ip-address $PIPVNGAZUREVNET1
+
+
+PIPVNGHQNETWORK=$(az network public-ip show \
+    --resource-group learn-e6efc855-2ce3-4766-a019-b0e869c9628a \
+    --name PIP-VNG-HQ-Network \
+    --query "[ipAddress]" \
+    --output tsv)
+
+az network local-gateway update \
+    --resource-group learn-e6efc855-2ce3-4766-a019-b0e869c9628a \
+    --name LNG-HQ-Network \
+    --gateway-ip-address $PIPVNGHQNETWORK
+
+SHAREDKEY=9a1AbUyHpcMYEcZyK8ToQeuNkAphkcc/jQob1fOazNBLbKxDzbJ8glT6DebEmfpnZ2+pHyag7ODc8VTxg6wcig==
+
+az network vpn-connection create \
+    --resource-group learn-e6efc855-2ce3-4766-a019-b0e869c9628a \
+    --name Azure-VNet-1-To-HQ-Network \
+    --vnet-gateway1 VNG-Azure-VNet-1 \
+    --shared-key $SHAREDKEY \
+    --local-gateway2 LNG-HQ-Network
+
+az network vpn-connection create \
+    --resource-group learn-e6efc855-2ce3-4766-a019-b0e869c9628a \
+    --name HQ-Network-To-Azure-VNet-1  \
+    --vnet-gateway1 VNG-HQ-Network \
+    --shared-key $SHAREDKEY \
+    --local-gateway2 LNG-Azure-VNet-1
+
+#verification
+az network vpn-connection show \
+    --resource-group learn-e6efc855-2ce3-4766-a019-b0e869c9628a \
+    --name Azure-VNet-1-To-HQ-Network  \
+    --output table \
+    --query '{Name:name,ConnectionStatus:connectionStatus}'
+
+az network vpn-connection show \
+    --resource-group learn-e6efc855-2ce3-4766-a019-b0e869c9628a \
+    --name HQ-Network-To-Azure-VNet-1  \
+    --output table \
+    --query '{Name:name,ConnectionStatus:connectionStatus}'
+
+
+
+
+
+
+
+
+
+
