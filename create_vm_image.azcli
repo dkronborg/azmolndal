@@ -1,0 +1,67 @@
+#https://docs.microsoft.com/en-us/azure/virtual-machines/linux/capture-image
+
+az vm deallocate \
+   --resource-group student08-OnPremise \
+   --name myVM
+
+az vm generalize \
+   --resource-group student08-OnPremise \
+   --name myVM
+
+az image create \
+   --resource-group student08-OnPremise \
+   --name GeneralizedImage --source myVM
+
+# output:
+# {- Finished ..
+#   "hyperVgeneration": "V1",
+#   "id": "/subscriptions/33e9cbd4-cd41-412f-8f2a-3c62a6a8d0ed/resourceGroups/student08-OnPremise/providers/Microsoft.Compute/images/GeneralizedImage",
+#   "location": "westeurope",
+#   "name": "GeneralizedImage",
+#   "provisioningState": "Succeeded",
+#   "resourceGroup": "student08-OnPremise",
+#   "sourceVirtualMachine": {
+#     "id": "/subscriptions/33e9cbd4-cd41-412f-8f2a-3c62a6a8d0ed/resourceGroups/student08-OnPremise/providers/Microsoft.Compute/virtualMachines/GeneralizedVM2",
+#     "resourceGroup": "student08-OnPremise"
+#   },
+#   "storageProfile": {
+#     "dataDisks": [],
+#     "osDisk": {
+#       "blobUri": null,
+#       "caching": "ReadWrite",
+#       "diskEncryptionSet": null,
+#       "diskSizeGb": 30,
+#       "managedDisk": {
+#         "id": "/subscriptions/33e9cbd4-cd41-412f-8f2a-3c62a6a8d0ed/resourceGroups/STUDENT08-ONPREMISE/providers/Microsoft.Compute/disks/GeneralizedVM2_disk1_35c77af9fae14e36800bdb684daf0e39",
+#         "resourceGroup": "STUDENT08-ONPREMISE"
+#       },
+#       "osState": "Generalized",
+#       "osType": "Linux",
+#       "snapshot": null,
+#       "storageAccountType": "Premium_LRS"
+#     },
+#     "zoneResilient": null
+#   },
+#   "tags": {},
+#   "type": "Microsoft.Compute/images"
+# }
+
+az vm create \
+   --resource-group student08-OnPremise \
+   --name myVMDeployed \
+   --image GeneralizedImage\
+   --admin-username azureuser \
+   --ssh-key-value id_rsa.pub
+
+az vm create \
+   --resource-group student08-OnPremise \
+   --name myOtherVMDeployed \
+   --image "/subscriptions/33e9cbd4-cd41-412f-8f2a-3c62a6a8d0ed/resourceGroups/student08-OnPremise/providers/Microsoft.Compute/images/GeneralizedImage" \
+   --admin-username azureuser \
+   --ssh-key-value id_rsa.pub
+
+az vm show \
+   --resource-group student08-OnPremise \
+   --name myVMDeployed \
+   --show-details
+
