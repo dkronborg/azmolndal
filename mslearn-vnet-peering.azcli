@@ -1,0 +1,145 @@
+#https://docs.microsoft.com/en-us/learn/modules/integrate-vnets-with-vnet-peering/
+az network vnet create \
+    --resource-group [sandbox resource group name] \
+    --name SalesVNet \
+    --address-prefix 10.1.0.0/16 \
+    --subnet-name Apps \
+    --subnet-prefix 10.1.1.0/24 \
+    --location northeurope
+
+az network vnet create \
+    --resource-group [sandbox resource group name] \
+    --name MarketingVNet \
+    --address-prefix 10.2.0.0/16 \
+    --subnet-name Apps \
+    --subnet-prefix 10.2.1.0/24 \
+    --location northeurope
+
+az network vnet create \
+    --resource-group [sandbox resource group name] \
+    --name ResearchVNet \
+    --address-prefix 10.3.0.0/16 \
+    --subnet-name Data \
+    --subnet-prefix 10.3.1.0/24 \
+    --location westeurope
+
+az network vnet list --output table
+
+az vm create \
+    --resource-group [sandbox resource group name] \
+    --no-wait \
+    --name SalesVM \
+    --location northeurope \
+    --vnet-name SalesVNet \
+    --subnet Apps \
+    --image UbuntuLTS \
+    --admin-username azureuser \
+    --admin-password <password>
+
+az vm create \
+    --resource-group [sandbox resource group name] \
+    --no-wait \
+    --name MarketingVM \
+    --location northeurope \
+    --vnet-name MarketingVNet \
+    --subnet Apps \
+    --image UbuntuLTS \
+    --admin-username azureuser \
+    --admin-password <password>
+
+az vm create \
+    --resource-group [sandbox resource group name] \
+    --no-wait \
+    --name ResearchVM \
+    --location westeurope \
+    --vnet-name ResearchVNet \
+    --subnet Data \
+    --image UbuntuLTS \
+    --admin-username azureuser \
+    --admin-password <password>
+
+watch -d -n 5 "az vm list \
+    --resource-group [sandbox resource group name] \
+    --show-details \
+    --query '[*].{Name:name, ProvisioningState:provisioningState, PowerState:powerState}' \
+    --output table"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
