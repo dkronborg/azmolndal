@@ -64,29 +64,78 @@ watch -d -n 5 "az vm list \
     --query '[*].{Name:name, ProvisioningState:provisioningState, PowerState:powerState}' \
     --output table"
 
+#part 2
 
+az network vnet peering create \
+    --name SalesVNet-To-MarketingVNet \
+    --remote-vnet MarketingVNet \
+    --resource-group learn-eb30a4c7-0246-45e7-9f91-7eb5a41341db \
+    --vnet-name SalesVNet \
+    --allow-vnet-access
 
+az network vnet peering create \
+    --name MarketingVNet-To-SalesVNet \
+    --remote-vnet SalesVNet \
+    --resource-group learn-eb30a4c7-0246-45e7-9f91-7eb5a41341db \
+    --vnet-name MarketingVNet \
+    --allow-vnet-access
 
+az network vnet peering create \
+    --name MarketingVNet-To-ResearchVNet \
+    --remote-vnet ResearchVNet \
+    --resource-group learn-eb30a4c7-0246-45e7-9f91-7eb5a41341db \
+    --vnet-name MarketingVNet \
+    --allow-vnet-access
 
+az network vnet peering create \
+    --name ResearchVNet-To-MarketingVNet \
+    --remote-vnet MarketingVNet \
+    --resource-group learn-eb30a4c7-0246-45e7-9f91-7eb5a41341db \
+    --vnet-name ResearchVNet \
+    --allow-vnet-access
 
+az network vnet peering list \
+    --resource-group learn-eb30a4c7-0246-45e7-9f91-7eb5a41341db \
+    --vnet-name SalesVNet \
+    --output table
 
+az network vnet peering list \
+    --resource-group learn-eb30a4c7-0246-45e7-9f91-7eb5a41341db \
+    --vnet-name ResearchVNet \
+    --output table
 
+az network vnet peering list \
+    --resource-group learn-eb30a4c7-0246-45e7-9f91-7eb5a41341db \
+    --vnet-name MarketingVNet \
+    --output table
 
+az network nic show-effective-route-table \
+    --resource-group learn-eb30a4c7-0246-45e7-9f91-7eb5a41341db \
+    --name SalesVMVMNic \
+    --output table
 
+az network nic show-effective-route-table \
+    --resource-group learn-eb30a4c7-0246-45e7-9f91-7eb5a41341db \
+    --name MarketingVMVMNic \
+    --output table
 
+az network nic show-effective-route-table \
+    --resource-group learn-eb30a4c7-0246-45e7-9f91-7eb5a41341db \
+    --name ResearchVMVMNic \
+    --output table
 
+#part 3
+az vm list \
+    --resource-group learn-eb30a4c7-0246-45e7-9f91-7eb5a41341db \
+    --query "[*].{Name:name, PrivateIP:privateIps, PublicIP:publicIps}" \
+    --show-details \
+    --output table
 
-
-
-
-
-
-
-
-
-
-
-
+# Name         PrivateIP    PublicIP
+# -----------  -----------  -------------
+# MarketingVM  10.2.1.4     168.63.39.105
+# SalesVM      10.1.1.4     138.91.60.58
+# ResearchVM   10.3.1.4     40.118.83.48
 
 
 
