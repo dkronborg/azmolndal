@@ -1,0 +1,111 @@
+#https://docs.microsoft.com/en-us/learn/modules/add-and-size-disks-in-azure-virtual-machines/
+
+az configure --defaults location=eastus
+
+az configure --defaults group="[sandbox Resource Group]"
+
+az vm create \
+  --name support-web-vm01 \
+  --image UbuntuLTS \
+  --size Standard_DS1_v2 \
+  --admin-username azureuser \
+  --generate-ssh-keys
+
+az vm disk attach \
+  --vm-name support-web-vm01 \
+  --name uploadDataDisk1 \
+  --size-gb 64 \
+  --sku Premium_LRS \
+  --new
+
+ipaddress=$(az vm show \
+  --name support-web-vm01 \
+  --show-details \
+  --query [publicIps] \
+  --output tsv)
+
+# ssh azureuser@$ipaddress lsblk
+
+az vm extension set \
+  --vm-name support-web-vm01 \
+  --name customScript \
+  --publisher Microsoft.Azure.Extensions \
+  --settings '{"fileUris":["https://raw.githubusercontent.com/MicrosoftDocs/mslearn-add-and-size-disks-in-azure-virtual-machines/master/add-data-disk.sh"]}' \
+  --protected-settings '{"commandToExecute": "./add-data-disk.sh"}'
+
+#ssh azureuser@$ipaddress lsblk
+
+#part 2
+
+az disk list \
+  --query '[*].{Name:name,Gb:diskSizeGb,Tier:sku.tier}' \
+  --output table
+
+az vm deallocate --name support-web-vm01
+
+az disk update --name uploadDataDisk1 --size-gb 128
+
+az vm start --name support-web-vm01
+
+ipaddress=$(az vm show --name support-web-vm01 -d --query [publicIps] -o tsv)
+
+#ssh azureuser@$ipaddress lsblk
+
+az vm extension set \
+  --vm-name support-web-vm01 \
+  --name customScript \
+  --publisher Microsoft.Azure.Extensions \
+  --settings '{"fileUris":["https://raw.githubusercontent.com/MicrosoftDocs/mslearn-add-and-size-disks-in-azure-virtual-machines/master/resize-data-disk.sh"]}' \
+  --protected-settings '{"commandToExecute": "./resize-data-disk.sh"}'
+
+#ssh azureuser@$ipaddress lsblk
+
+#ssh azureuser@$ipaddress df -h
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
