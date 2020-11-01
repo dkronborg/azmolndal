@@ -1,0 +1,154 @@
+#https://docs.microsoft.com/en-us/learn/modules/deploy-vms-from-vhd-templates/
+az vm create \
+    --name MyUbuntuVM \
+    --image UbuntuLTS \
+    --generate-ssh-keys
+
+az vm open-port \
+    --name MyUbuntuVM \
+    --port 80
+
+az vm extension set \
+    --publisher Microsoft.Azure.Extensions \
+    --name CustomScript \
+    --vm-name MyUbuntuVM \
+    --settings '{"commandToExecute":"apt-get -y update && apt-get -y install nginx && hostname > /var/www/html/index.html"}'
+
+
+echo http://$(az vm list-ip-addresses \
+             --name MyUbuntuVM \
+             --query "[].virtualMachine.network.publicIpAddresses[*].ipAddress" \
+             --output tsv)
+
+# ssh -o StrictHostKeyChecking=no <ip address>
+# sudo waagent -deprovision+user
+#exit
+
+az vm deallocate \
+    --name MyUbuntuVM
+
+az vm generalize \
+    --name MyUbuntuVM
+
+az image create \
+    --name MyVMIMage \
+    --source MyUbuntuVM
+
+az vm create \
+  --name MyVMFromImage \
+  --computer-name MyVMFromImage \
+  --image MyVMImage \
+  --admin-username azureuser \
+  --generate-ssh-keys
+
+az vm extension set \
+    --publisher Microsoft.Azure.Extensions \
+    --name CustomScript \
+    --vm-name MyVMFromImage \
+    --settings '{"commandToExecute":"hostname > /var/www/html/index.html"}'
+
+az vm open-port \
+    --name MyVMFromImage \
+    --port 80
+
+echo http://$(az vm list-ip-addresses \
+                --name MyVMFromImage \
+                --query "[].virtualMachine.network.publicIpAddresses[*].ipAddress" \
+                --output tsv)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
