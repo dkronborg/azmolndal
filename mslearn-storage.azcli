@@ -1,0 +1,41 @@
+#https://docs.microsoft.com/en-us/learn/modules/store-and-share-with-azure-files/
+
+az group create --name mslearn-storage --location westeurope
+
+az storage account create \
+--name stundet08stacc \
+--resource-group mslearn-storage \
+--sku Standard_GRS
+
+
+export storageAccountKey=$(az storage account keys list \
+    --resource-group mslearn-storage \
+    --account-name stundet08stacc \
+    --query "[0].value" | tr -d '"')
+
+az storage share create \
+--account-name stundet08stacc \
+--account-key $storageAccountKey \
+--name student08share
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
