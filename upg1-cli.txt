@@ -21,8 +21,3 @@ Select-AzSubscription Subscription03
 ny resursgrupp och ett storage account:
 New-AzResourceGroupDeployment -ResourceGroupName student08-test-arm -TemplateFile .\azuredeploy2.json
 
-
-
-
-
-

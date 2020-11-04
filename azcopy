@@ -1,1 +1,2 @@
 sudo azcopy copy file.txt "https://student08.blob.core.windows.net/business/?sv=2019-12-12&ss=b&srt=sco&sp=rwdlacx&se=2020-10-29T14:38:52Z&st=2020-10-29T06:38:52Z&spr=https&sig=JGmslkGIhl9fKeuVmIXXdRlnzPn6AMpQMEG2erTAT78%3D"
+azcopy copy '.\battle cruiser.PNG' "https://student08.file.core.windows.net/financing?sv=2019-12-12&ss=bfqt&srt=sco&sp=rwdlacupx&se=2020-11-04T04:55:04Z&st=2020-11-03T20:55:04Z&spr=https&sig=GUUMR6ej2BLOupSUXDXB1tk0Lx%2FYlXXioK7PDH%2FsL0E%3D"
