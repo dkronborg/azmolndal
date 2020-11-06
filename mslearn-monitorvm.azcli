@@ -1,0 +1,120 @@
+#https://docs.microsoft.com/en-us/learn/modules/monitor-azure-vm-using-diagnostic-data/
+STORAGE=metricsstorage$RANDOM
+LOCATION=westeurope
+RG=mslearn-monitorvm
+
+az group create --name $RG --location $LOCATION
+
+az storage account create \
+    --name $STORAGE \
+    --sku Standard_LRS \
+    --location $LOCATION \
+    --resource-group [sandbox resource group name]
+
+az vm create \
+    --name monitored-linux-vm \
+    --image UbuntuLTS \
+    --size Standard_B1s \
+    --location $LOCATION \
+    --admin-username azureuser \
+    --boot-diagnostics-storage $STORAGE \
+    --resource-group $RG \
+    --generate-ssh-keys
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
