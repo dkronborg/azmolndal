@@ -9,8 +9,9 @@ az storage account create \
     --name $STORAGE \
     --sku Standard_LRS \
     --location $LOCATION \
-    --resource-group [sandbox resource group name]
+    --resource-group $RG
 
+#generate a new ssh-key pair and use it instead of letting az vm create do it
 az vm create \
     --name monitored-linux-vm \
     --image UbuntuLTS \

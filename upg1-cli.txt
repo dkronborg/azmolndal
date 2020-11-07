@@ -21,3 +21,8 @@ Select-AzSubscription Subscription03
 ny resursgrupp och ett storage account:
 New-AzResourceGroupDeployment -ResourceGroupName student08-test-arm -TemplateFile .\azuredeploy2.json
 
+
+https://student08keyvault.vault.azure.net/
+
+PUT https://student08keyvault.vault.azure.net/keys/testkey?api-version=7.1
+az keyvault key import --vault-name "student08keyvault" --name "FirstKey" --pem-file "./testkey" --protection software

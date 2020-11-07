@@ -1,0 +1,12 @@
+#create ssh key
+ssh-keygen -m PEM -t rsa -b 4096 -f <filename>
+
+#conert to ssh2
+ssh-keygen -e -f openssh.pub > ssh2.pub
+
+#get ssh-key from vault
+az keyvault secret show --name <keyname> --vault-name student08keyvault --query "value" --output tsv
+
+ssh -i <filename> azureuser@1.1.1.1
+
+
