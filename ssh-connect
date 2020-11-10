@@ -4,9 +4,37 @@ ssh-keygen -m PEM -t rsa -b 4096 -f <filename>
 #conert to ssh2
 ssh-keygen -e -f openssh.pub > ssh2.pub
 
+#add to keyvault
+az keyvault secret set --name masterkey-private --vault-name student08keyvault --file masterkey --encoding ascii --description "masterkey private"
+az keyvault secret set --name masterkey-public --vault-name student08keyvault --file masterkey.pub --encoding ascii --description "masterkey public"
+az keyvault secret set --name masterkey-ssh2-public --vault-name student08keyvault --file masterkeyssh2.pub --encoding ascii --description "masterkey ssh2 public"
+
 #get ssh-key from vault
-az keyvault secret show --name <keyname> --vault-name student08keyvault --query "value" --output tsv
+az keyvault secret show --name masterkey --vault-name student08keyvault --query "value" --output tsv > tempkey
+sudo chmod 400 tempkey
+ssh -i tempkey azureuser@1.1.1.1
+sudo rm tempkey
 
-ssh -i <filename> azureuser@1.1.1.1
+#create vm with existing key
+sshkey="$(az keyvault secret show --name masterkey-ssh2-public --vault-name student08keyvault --query "value" --output tsv)"
+az keyvault secret show --name masterkey-ssh2-public --vault-name student08keyvault --query "value" --output tsv > tempkey.pub
 
+az vm create \
+  --resource-group 46-student08-auto \
+  --name VM1 \
+  --image UbuntuLTS \
+  --admin-username azureuser \
+  --size Standard_B1s \
+  --tags 'os=linux' 'owner=student08' \
+  --ssh-key-values tempkey.pub
 
+az vm create \
+  --resource-group 46-student08-auto \
+  --name VM2 \
+  --image UbuntuLTS \
+  --admin-username azureuser \
+  --size Standard_B1s \
+  --tags 'os=linux' 'owner=student08' \
+  --ssh-key-values tempkey.pub
+
+rm tempkey.pub
