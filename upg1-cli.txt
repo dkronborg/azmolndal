@@ -26,3 +26,8 @@ https://student08keyvault.vault.azure.net/
 
 PUT https://student08keyvault.vault.azure.net/keys/testkey?api-version=7.1
 az keyvault key import --vault-name "student08keyvault" --name "FirstKey" --pem-file "./testkey" --protection software
+
+
+
+
+New-AzResourceGroup -Name student08-test-deploy -Location westeurope
