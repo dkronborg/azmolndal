@@ -27,6 +27,12 @@
               "description": "Name of the virtual net."
             }
         },
+        "subnetName": {
+            "type": "string",
+            "metadata": {
+              "description": "Name of the virtual net."
+            }
+        },
         "nsgName": {
             "type": "string",
             "metadata": {
@@ -49,36 +55,6 @@
     "functions": [],
     "variables": {},
     "resources": [{
-        "name": "parameterVnetName",
-        "type": "Microsoft.Network/virtualNetworks",
-        "apiVersion": "2019-11-01",
-        "location": "[resourceGroup().location]",
-        "tags": {
-            "displayName": "parameterVnetName"
-        },
-        "properties": {
-            "addressSpace": {
-                "addressPrefixes": [
-                    "10.0.0.0/16"
-                ]
-            },
-            "subnets": [
-                {
-                    "name": "Subnet-1",
-                    "properties": {
-                        "addressPrefix": "10.0.0.0/24"
-                    }
-                },
-                {
-                    "name": "Subnet-2",
-                    "properties": {
-                        "addressPrefix": "10.0.1.0/24"
-                    }
-                }
-            ]
-        }
-    },
-    {
         "name": "[parameters('storageName')]",
         "type": "Microsoft.Storage/storageAccounts",
         "apiVersion": "2019-06-01",
@@ -100,14 +76,11 @@
             "displayName": "PublicIPAddress"
         },
         "properties": {
-            "publicIPAllocationMethod": "Dynamic",
-            "dnsSettings": {
-                "domainNameLabel": "[toLower('paramaterVMname')]"
-            }
+            "publicIPAllocationMethod": "Dynamic"
         }
     },
     {
-        "name": "paramaterVMname-nsg",
+        "name": "[parameters('nsgName')]",
         "type": "Microsoft.Network/networkSecurityGroups",
         "apiVersion": "2018-08-01",
         "location": "[resourceGroup().location]",
@@ -136,10 +109,10 @@
         "apiVersion": "2019-11-01",
         "location": "[resourceGroup().location]",
         "dependsOn": [
-            "[resourceId('Microsoft.Network/networkSecurityGroups', 'paramaterVMname-nsg')]"
+            "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('nsgName'))]"
         ],
         "tags": {
-            "displayName": "paramaterVMname-VirtualNetwork"
+            "displayName": "[parameters('vnetName')]"
         },
         "properties": {
             "addressSpace": {
@@ -149,11 +122,11 @@
             },
             "subnets": [
                 {
-                    "name": "paramaterVMname-VirtualNetwork-Subnet",
+                    "name": "[parameters('subnetName')]",
                     "properties": {
                         "addressPrefix": "10.0.0.0/24",
                         "networkSecurityGroup": {
-                            "id": "[resourceId('Microsoft.Network/networkSecurityGroups', 'paramaterVMname-nsg')]"
+                            "id": "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('nsgName'))]"
                         }
                     }
                 }
@@ -161,7 +134,7 @@
         }
     },
     {
-        "name": "paramaterVMname-NetworkInterface",
+        "name": "NetworkInterface",
         "type": "Microsoft.Network/networkInterfaces",
         "apiVersion": "2019-11-01",
         "location": "[resourceGroup().location]",
@@ -170,7 +143,7 @@
             "[resourceId('Microsoft.Network/virtualNetworks', parameters('vnetName'))]"
         ],
         "tags": {
-            "displayName": "paramaterVMname-NetworkInterface"
+            "displayName": "NetworkInterface"
         },
         "properties": {
             "ipConfigurations": [
@@ -182,7 +155,7 @@
                             "id": "[resourceId('Microsoft.Network/publicIPAddresses',  parameters('pipName'))]"
                         },
                         "subnet": {
-                            "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', 'paramaterVMname-VirtualNetwork', 'paramaterVMname-VirtualNetwork-Subnet')]"
+                            "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('vnetName'), parameters('subnetName'))]"
                         }
                     }
                 }
@@ -190,24 +163,24 @@
         }
     },
     {
-        "name": "paramaterVMname",
+        "name": "[parameters('vmName')]",
         "type": "Microsoft.Compute/virtualMachines",
         "apiVersion": "2019-07-01",
         "location": "[resourceGroup().location]",
         "dependsOn": [
-            "[resourceId('Microsoft.Network/networkInterfaces', 'paramaterVMname-NetworkInterface')]"
+            "[resourceId('Microsoft.Network/networkInterfaces', 'NetworkInterface')]"
         ],
         "tags": {
-            "displayName": "paramaterVMname"
+            "displayName": "[parameters('vnetName')]"
         },
         "properties": {
             "hardwareProfile": {
                 "vmSize": "Standard_A2_v2"
             },
             "osProfile": {
-                "computerName": "paramaterVMname",
-                "adminUsername": "parameterAdminUsername",
-                "adminPassword": "parameterAdminPassword"
+                "computerName": "[parameters('vnetName')]",
+                "adminUsername": "[parameters('adminUsername')]",
+                "adminPassword": "[parameters('adminPassword')]"
             },
             "storageProfile": {
                 "imageReference": {
@@ -217,7 +190,7 @@
                     "version": "latest"
                 },
                 "osDisk": {
-                    "name": "paramaterVMname-OSDisk",
+                    "name": "OSDisk",
                     "caching": "ReadWrite",
                     "createOption": "FromImage"
                 }
@@ -225,7 +198,7 @@
             "networkProfile": {
                 "networkInterfaces": [
                     {
-                        "id": "[resourceId('Microsoft.Network/networkInterfaces', 'paramaterVMname-NetworkInterface')]"
+                        "id": "[resourceId('Microsoft.Network/networkInterfaces', 'NetworkInterface')]"
                     }
                 ]
             },

@@ -6,13 +6,16 @@
             "value": "azureuser"
         },
         "adminPassword": {
-            "value": "azureuser123"
+            "value": "Azureuser123_!"
         },
         "vmName": {
             "value": "VM1"
         },
         "vnetName": {
             "value": "vnet"
+        },
+        "subnetName": {
+            "value": "subnet"
         },
         "nsgName": {
             "value": "nsg"
