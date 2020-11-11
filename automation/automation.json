@@ -2,6 +2,12 @@
     "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
+        "deploymentname": {
+            "type": "string",
+            "metadata": {
+              "description": "Name of deployment."
+            }
+        },
         "adminUsername": {
             "type": "string",
             "metadata": {
@@ -21,37 +27,45 @@
               "description": "Name of the virtual machine."
             }
         },
-        "subnetName": {
-            "type": "string",
-            "metadata": {
-              "description": "Name of the virtual net."
-            }
-        },
-        "nsgName": {
-            "type": "string",
-            "metadata": {
-              "description": "Name of the network security group."
-            }
-        },
         "storageName": {
             "type": "string",
             "metadata": {
               "description": "Name of the storage account."
             }
         },
-        "pipName": {
+        "environment": {
             "type": "string",
             "metadata": {
-              "description": "Name of the public ip."
-            }
+              "description": "Type of environment"
+            },
+            "allowedValues": [
+                "development",
+                "staging",
+                "production"
+            ]
         }
     },
     "functions": [],
     "variables": {
-        "vnetName": "[concat(parameters('vmName'), '-vnet')]"
+        "vnetName": "[concat(variables('environmentSettings')[parameters('environment')].shortname, '-', parameters('vmName'), '-vnet-', parameters('deploymentname'))]",
+        "subnetName": "[concat(variables('vnetName'), '-subnet')]",
+        "nsgName": "[concat(variables('environmentSettings')[parameters('environment')].shortname, '-nsg-', parameters('deploymentname'))]",
+        "storageName": "[concat(parameters('storageName'), variables('environmentSettings')[parameters('environment')].shortname)]",
+        "pipName": "[concat(variables('environmentSettings')[parameters('environment')].shortname, '-pip-', parameters('deploymentname'))]",
+        "environmentSettings": {
+            "development":{
+                "shortname": "dev"
+            },
+            "staging":{
+                "shortname": "stg"
+            },
+            "production":{
+                "shortname": "prd"
+            }
+        }
     },
     "resources": [{
-        "name": "[parameters('storageName')]",
+        "name": "[variables('storageName')]",
         "type": "Microsoft.Storage/storageAccounts",
         "apiVersion": "2019-06-01",
         "location": "[resourceGroup().location]",
@@ -64,7 +78,7 @@
         "kind": "Storage"
     },
     {
-        "name": "[parameters('pipName')]",
+        "name": "[concat(variables('environmentSettings')[parameters('environment')].shortname, '-pip-', parameters('deploymentname'))]",
         "type": "Microsoft.Network/publicIPAddresses",
         "apiVersion": "2019-11-01",
         "location": "[resourceGroup().location]",
@@ -76,7 +90,7 @@
         }
     },
     {
-        "name": "[parameters('nsgName')]",
+        "name": "[variables('nsgName')]",
         "type": "Microsoft.Network/networkSecurityGroups",
         "apiVersion": "2018-08-01",
         "location": "[resourceGroup().location]",
@@ -105,7 +119,7 @@
         "apiVersion": "2019-11-01",
         "location": "[resourceGroup().location]",
         "dependsOn": [
-            "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('nsgName'))]"
+            "[resourceId('Microsoft.Network/networkSecurityGroups', variables('nsgName'))]"
         ],
         "tags": {
             "displayName": "[variables('vnetName')]"
@@ -118,11 +132,11 @@
             },
             "subnets": [
                 {
-                    "name": "[parameters('subnetName')]",
+                    "name": "[variables('subnetName')]",
                     "properties": {
                         "addressPrefix": "10.0.0.0/24",
                         "networkSecurityGroup": {
-                            "id": "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('nsgName'))]"
+                            "id": "[resourceId('Microsoft.Network/networkSecurityGroups', variables('nsgName'))]"
                         }
                     }
                 }
@@ -135,7 +149,7 @@
         "apiVersion": "2019-11-01",
         "location": "[resourceGroup().location]",
         "dependsOn": [
-            "[resourceId('Microsoft.Network/publicIPAddresses', parameters('pipName'))]",
+            "[resourceId('Microsoft.Network/publicIPAddresses', variables('pipName'))]",
             "[resourceId('Microsoft.Network/virtualNetworks', variables('vnetName'))]"
         ],
         "tags": {
@@ -148,10 +162,10 @@
                     "properties": {
                         "privateIPAllocationMethod": "Dynamic",
                         "publicIPAddress": {
-                            "id": "[resourceId('Microsoft.Network/publicIPAddresses',  parameters('pipName'))]"
+                            "id": "[resourceId('Microsoft.Network/publicIPAddresses',  variables('pipName'))]"
                         },
                         "subnet": {
-                            "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('vnetName'), parameters('subnetName'))]"
+                            "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('vnetName'), variables('subnetName'))]"
                         }
                     }
                 }
@@ -201,7 +215,7 @@
             "diagnosticsProfile": {
                 "bootDiagnostics": {
                     "enabled": true,
-                    "storageUri": "[reference(resourceId('Microsoft.Storage/storageAccounts/', parameters('storageName'))).primaryEndpoints.blob]"
+                    "storageUri": "[reference(resourceId('Microsoft.Storage/storageAccounts/', variables('storageName'))).primaryEndpoints.blob]"
                 }
             }
         }
