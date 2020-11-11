@@ -11,9 +11,6 @@
         "vmName": {
             "value": "VM1"
         },
-        "vnetName": {
-            "value": "vnet"
-        },
         "subnetName": {
             "value": "subnet"
         },

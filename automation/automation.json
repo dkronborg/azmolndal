@@ -21,12 +21,6 @@
               "description": "Name of the virtual machine."
             }
         },
-        "vnetName": {
-            "type": "string",
-            "metadata": {
-              "description": "Name of the virtual net."
-            }
-        },
         "subnetName": {
             "type": "string",
             "metadata": {
@@ -53,7 +47,9 @@
         }
     },
     "functions": [],
-    "variables": {},
+    "variables": {
+        "vnetName": "[concat(parameters('vmName'), '-vnet')]"
+    },
     "resources": [{
         "name": "[parameters('storageName')]",
         "type": "Microsoft.Storage/storageAccounts",
@@ -104,7 +100,7 @@
         }
     },
     {
-        "name": "[parameters('vnetName')]",
+        "name": "[variables('vnetName')]",
         "type": "Microsoft.Network/virtualNetworks",
         "apiVersion": "2019-11-01",
         "location": "[resourceGroup().location]",
@@ -112,7 +108,7 @@
             "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('nsgName'))]"
         ],
         "tags": {
-            "displayName": "[parameters('vnetName')]"
+            "displayName": "[variables('vnetName')]"
         },
         "properties": {
             "addressSpace": {
@@ -140,7 +136,7 @@
         "location": "[resourceGroup().location]",
         "dependsOn": [
             "[resourceId('Microsoft.Network/publicIPAddresses', parameters('pipName'))]",
-            "[resourceId('Microsoft.Network/virtualNetworks', parameters('vnetName'))]"
+            "[resourceId('Microsoft.Network/virtualNetworks', variables('vnetName'))]"
         ],
         "tags": {
             "displayName": "NetworkInterface"
@@ -155,7 +151,7 @@
                             "id": "[resourceId('Microsoft.Network/publicIPAddresses',  parameters('pipName'))]"
                         },
                         "subnet": {
-                            "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('vnetName'), parameters('subnetName'))]"
+                            "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('vnetName'), parameters('subnetName'))]"
                         }
                     }
                 }
@@ -171,14 +167,14 @@
             "[resourceId('Microsoft.Network/networkInterfaces', 'NetworkInterface')]"
         ],
         "tags": {
-            "displayName": "[parameters('vnetName')]"
+            "displayName": "[variables('vnetName')]"
         },
         "properties": {
             "hardwareProfile": {
                 "vmSize": "Standard_A2_v2"
             },
             "osProfile": {
-                "computerName": "[parameters('vnetName')]",
+                "computerName": "[variables('vnetName')]",
                 "adminUsername": "[parameters('adminUsername')]",
                 "adminPassword": "[parameters('adminPassword')]"
             },
