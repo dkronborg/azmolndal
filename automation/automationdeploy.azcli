@@ -1,0 +1,6 @@
+az group create --name student08-test-deploy --location westeurope
+
+az deployment group validate --resource-group student08-test-deploy  --template-file './automation.json' --parameters './automation.parameters.json' --debug
+
+az deployment group create --resource-group student08-test-deploy --template-file './automation.json' --parameters './automation.parameters.json' --query "properties.outputs" --output jsonc
+
