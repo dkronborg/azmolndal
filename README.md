@@ -11,3 +11,5 @@ Azure App Service
 Azure Functions
 
 Powershell
+
+and others...
