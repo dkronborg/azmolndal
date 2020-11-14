@@ -52,6 +52,8 @@
         "nsgName": "[concat(variables('environmentSettings')[parameters('environment')].shortname, '-nsg-', parameters('deploymentname'))]",
         "storageName": "[concat(parameters('storageName'), variables('environmentSettings')[parameters('environment')].shortname)]",
         "pipName": "[concat(variables('environmentSettings')[parameters('environment')].shortname, '-pip-', parameters('deploymentname'))]",
+        "networkInterfaceName": "[concat(variables('environmentSettings')[parameters('environment')].shortname, '-', parameters('vmName'), '-NetworkInterface-', parameters('deploymentname'))]",
+        "vmName": "[concat(variables('environmentSettings')[parameters('environment')].shortname, '-', parameters('vmName'), '-', parameters('deploymentname'))]",
         "environmentSettings": {
             "development":{
                 "shortname": "dev"
@@ -78,7 +80,7 @@
         "kind": "Storage"
     },
     {
-        "name": "[concat(variables('environmentSettings')[parameters('environment')].shortname, '-pip-', parameters('deploymentname'))]",
+        "name": "[variables('pipName')]",
         "type": "Microsoft.Network/publicIPAddresses",
         "apiVersion": "2019-11-01",
         "location": "[resourceGroup().location]",
@@ -144,7 +146,7 @@
         }
     },
     {
-        "name": "NetworkInterface",
+        "name": "[variables('networkInterfaceName')]",
         "type": "Microsoft.Network/networkInterfaces",
         "apiVersion": "2019-11-01",
         "location": "[resourceGroup().location]",
@@ -153,7 +155,7 @@
             "[resourceId('Microsoft.Network/virtualNetworks', variables('vnetName'))]"
         ],
         "tags": {
-            "displayName": "NetworkInterface"
+            "displayName": "[variables('networkInterfaceName')]"
         },
         "properties": {
             "ipConfigurations": [
@@ -173,22 +175,22 @@
         }
     },
     {
-        "name": "[parameters('vmName')]",
+        "name": "[variables('vmName')]",
         "type": "Microsoft.Compute/virtualMachines",
         "apiVersion": "2019-07-01",
         "location": "[resourceGroup().location]",
         "dependsOn": [
-            "[resourceId('Microsoft.Network/networkInterfaces', 'NetworkInterface')]"
+            "[resourceId('Microsoft.Network/networkInterfaces', variables('networkInterfaceName'))]"
         ],
         "tags": {
-            "displayName": "[variables('vnetName')]"
+            "displayName": "[variables('vmName')]"
         },
         "properties": {
             "hardwareProfile": {
                 "vmSize": "Standard_A2_v2"
             },
             "osProfile": {
-                "computerName": "[variables('vnetName')]",
+                "computerName": "[variables('vmName')]",
                 "adminUsername": "[parameters('adminUsername')]",
                 "adminPassword": "[parameters('adminPassword')]"
             },
@@ -200,7 +202,7 @@
                     "version": "latest"
                 },
                 "osDisk": {
-                    "name": "OSDisk",
+                    "name": "[concat(variables('environmentSettings')[parameters('environment')].shortname, '-', parameters('vmName'), '-OSDisk-', parameters('deploymentname'))]",
                     "caching": "ReadWrite",
                     "createOption": "FromImage"
                 }
@@ -208,7 +210,7 @@
             "networkProfile": {
                 "networkInterfaces": [
                     {
-                        "id": "[resourceId('Microsoft.Network/networkInterfaces', 'NetworkInterface')]"
+                        "id": "[resourceId('Microsoft.Network/networkInterfaces', variables('networkInterfaceName'))]"
                     }
                 ]
             },
