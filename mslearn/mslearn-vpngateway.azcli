@@ -109,7 +109,7 @@ az network local-gateway update \
     --gateway-ip-address $PIPVNGHQNETWORK
 
 #create connection
-SHAREDKEY=9a1AbUyHpcMYEcZyK8ToQeuNkAphkcc/jQob1fOazNBLbKxDzbJ8glT6DebEmfpnZ2+pHyag7ODc8VTxg6wcig==
+#SHAREDKEY=********
 
 az network vpn-connection create \
     --resource-group learn-e6efc855-2ce3-4766-a019-b0e869c9628a \
