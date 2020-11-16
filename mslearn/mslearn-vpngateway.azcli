@@ -1,3 +1,4 @@
+#https://docs.microsoft.com/en-us/learn/modules/connect-on-premises-network-with-vpn-gateway
 az network vnet create \
     --resource-group learn-e6efc855-2ce3-4766-a019-b0e869c9628a \
     --name Azure-VNet-1 \
@@ -109,6 +110,7 @@ az network local-gateway update \
     --gateway-ip-address $PIPVNGHQNETWORK
 
 #create connection
+openssl rand -base64 64
 #SHAREDKEY=********
 
 az network vpn-connection create \
