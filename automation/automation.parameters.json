@@ -5,6 +5,9 @@
         "deploymentname": {
             "value": "student08"
         },
+        "environment": {
+            "value": "development"
+        },
         "adminUsername": {
             "value": "azureuser"
         },
@@ -16,9 +19,6 @@
         },
         "storageName": {
             "value": "storge654776"
-        },
-        "environment": {
-            "value": "development"
         }
     }
 }
