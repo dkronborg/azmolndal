@@ -1,0 +1,114 @@
+#https://docs.microsoft.com/en-us/learn/modules/load-balance-web-traffic-with-application-gateway/
+RG="mslearn-appgateway"
+location="westeurope"
+
+
+az group create --name $RG --location $location
+
+az network vnet create \
+  --resource-group $RG \
+  --name vehicleAppVnet \
+  --address-prefix 10.0.0.0/16 \
+  --subnet-name webServerSubnet \
+  --subnet-prefix 10.0.1.0/24
+
+az vm create \
+  --resource-group $RG \
+  --name webServer1 \
+  --image UbuntuLTS \
+  --admin-username azureuser \
+  --admin-password "Azureuser123" \
+  --vnet-name vehicleAppVnet \
+  --subnet webServerSubnet \
+  --public-ip-address "" \
+  --nsg "" \
+  --custom-data module-files/scripts/vmconfig.sh \
+  --no-wait
+
+
+az vm create \
+  --resource-group $RG \
+  --name webServer2 \
+  --image UbuntuLTS \
+  --admin-username azureuser \
+  --admin-password "Azureuser123" \
+  --vnet-name vehicleAppVnet \
+  --subnet webServerSubnet \
+  --public-ip-address "" \
+  --nsg "" \
+  --custom-data module-files/scripts/vmconfig.sh
+
+az vm list \
+  --resource-group $RG \
+  --show-details \
+  --output table
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
