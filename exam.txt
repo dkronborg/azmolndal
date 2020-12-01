@@ -1,0 +1,42 @@
+The company Pham wants you to set up the initial components for their new application Zork.
+They have allocated an address range to be used for azure and any additional service that Pham might want to use in the future thus providing a big span of 10.255.0.0/16.
+They wish to have one subnet allocated for their Zork web servers since they wish to utilize VMs for this purpose. For structured storage they have decided upon SQL server as a service and lastly for files they have decided to use azure storage account.
+They need you to set up this solution for them. To start with they only require one small VM, but they believe that once they are live rapid growth is to be expected.
+The only external source that should be able to access this is on port 443 from the internet, the rest should be securely locked down.
+The storage account should have enabled files with a folder of statistics that should be available to the VM as a network drive.
+
+Things to remember
+Create a resource group named: zork-studentXX
+Set the tag “Student”:”FullName” on the resource group
+
+When you turn in your assignment, please provide some description as to how you have set it up and why.
+
+
+Make vnet 10.255.0.0/16 
+Make subnet for zork application //subnet is smaller becasue that a big vnet
+Make VM in subnet //creating small VM as poc
+Make SQL database (PaaS)
+Make file share in storage account //file share connected to VM
+Make/explain what a more scalabe solution would look like //scaleset is the most obvious way of making the solution more scalabe. It should also be coupled with an application gateway to load balance incoming requests
+Only access port is 443 //this means that ssh port should be disabled, bastion could be an alternative for remote access if needed in production
+Adding a key vault to store passwords for database and VM. This is to discourage the use of simple passwords such as admin123
+Policy in place to tag all resources with “Student”:”FullName”
+
+
+Text for hand-in:
+Created a vnet 10.255.0.0/16 and a subnet 10.255.0.0/24. The subnet is smaller because the vnet is enourmous with its 65000+ address and the application subnet is probably fine with 200+ address, for now at least. 
+
+Created a small VM and installed nginx on it to show that its possible to connect to (https://zork-student08.westeurope.cloudapp.azure.com/). The only port that is allowed from the outside is port 443.
+
+Created an SQL database for structured storage. It is created from the Azure Marketplace (PaaS) to avoid having to maintain another VM.
+
+Created a storage account with a file share that is also mounted on the VM (hard to verify now that access to the VM has been disabled).
+
+Additionaly I created a key valut to store passwords. The two passwords that are in there right now are VM password and database password. This is simply to discourage the user of simple passwords such as admin123.
+
+As this excercise was meant to "set up the initial components" I have only created a single VM for the application to run on. To scale this solution I would recommend creating a scale set. The scale set will increse the number of VMs running the application when demand grows and decrese the number when demand slackens. As a front for the application I would recommend an Application Gateway. Application Gateway routes traffic to a pool of web servers based on the URL of a request. The pool of web servers in this case is the scale set. 
+
+
+
+
+
