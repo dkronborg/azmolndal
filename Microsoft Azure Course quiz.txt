@@ -1,0 +1,136 @@
+Microsoft Azure Course
+Din e-postadress (90dankro@gafe.molndal.se) kommer att registreras när du skickar in det här formuläret. Inte du? Byt konto
+What does Private Cloud mean?
+1 punkt
+That your Azure is restricted to only allow employees to access it
+That you host your own data center
+It is a specific offering that you can request from Microsoft that gives you better control
+It is an Azure instance that restricts any other regions to connect to it
+Your application team is building a new software and they wish to focus on building, testing and deploying without having to worry about the underlaying hardware or software. What would your suggested service type be?
+1 punkt
+Infrastructure as s Service
+Infrastructure as Code
+Platform as a Service
+Software as a Service
+Which of the following statements about Public Cloud is not accurate?
+1 punkt
+It offers great elasticity
+The cost is hidden
+Does not require an upfront investment
+You are tasked with setting up a two VMs for hosting a website for your company, they wish for the site to be have good availability but we may only use the region of North Europe how would you setup your VMs to gain good availability and reliability
+2 punkter
+Create 2 different types of VMs so it doesn't use the same rack in the data center.
+Create 2 VMs and put them in an availability set to indicate that they need to be updated separately
+Create 2 VMs and put them into 2 different VNETs because this will mean different racks
+Your company has a hard time forecasting the cost of your cloud environment. As such the finance group ask you how they could get more insights into the day to day cost of your cloud setup. You state that there is plenty of useful information around costs available to them before they get there invoice. They wish to be able to see it on their own, since you have 15 active subscriptions and any one of them could be tasked with analysis of the cost. What would be a suitable approach for giving them access to all costs while still making sure they can not read sensitive data or manage resources?
+2 punkter
+Give the organization AD group for finance billing reader access on each subscription
+Give the finance manager billing reader access to each subscription
+Give each individual at the finance group billing reader to the root management group
+Give the organization AD group for finance billing reader access to the root management group
+Give the organization AD group for finance billing reader access on each resource
+Monitoring is a very important part of the cloud. Using both Logs & Metrics. Using this you may create dashboards for visualization or trigger alerts on specific cases such as high CPU, no more disk space & pod restarted. Can you mention at least 2 actions that could get triggered by such an alert?
+2 punkter
+Which of the following options describes the hierarchy within Azure? Options are written top to bottom.
+1 punkt
+AD | Management Groups | Subscriptions | Resource groups | Resources
+AD | Subscriptions | Management Groups | Resource Groups | Resources
+Management Group | ADs | Subscriptions | Resource Groups | Resources
+AD| Management Groups | Subscriptions | Resources
+Subscriptions | Resources | ADs | Management Groups
+AD | Management Groups | Subscriptions | Resource | Resources groups
+AD | Management Groups | Resource | Subscriptions | Resources groups
+What's is the main difference between Azure RBAC roles and Azure AD roles
+2 punkter
+You can assign Azure RBAC roles at the root level.
+Azure AD roles are used to manage access to Azure resources. Azure RBAC roles are used to view and manage Azure resources.
+Azure RBAC roles apply to Azure resources. Azure AD roles apply to Azure AD resources such as users, groups, and domains.
+They are the same thing
+Which of the following features does not apply to resource groups?
+2 punkter
+Resources can be in only one resource group.
+Resources can be moved from one resource group to another resource group.
+Resource groups can be nested.
+Role-based access control can be applied to the resource group.
+Any tag you put on your resource will be automatically propagated to your resource group
+1 punkt
+True
+False
+Which of the following approaches might be a good usage of tags?
+1 punkt
+Using tags to store environment and department association
+Using tags in conjunction with Azure Automation to schedule maintenance windows
+Using tags to associate a cost center with resources for internal chargeback
+All of the above are good ways to use tags
+Your company needs to connect azure resources across geographical regions with azure networking, what option should you be using?
+2 punkter
+Azure ExpressRoute
+Virtual network peering
+VPN Gateway
+Which peering configuration would you use for your Express route circuit where you need to allow direct connections to Azure compute resources?
+2 punkter
+Azure Virtual Network peering
+Azure private peering
+Microsoft peering
+You have 1 VNET with 2 subnets in them; webserver and databaseservers. Given that the network security group inbound rules are setup like this for both subnets. Which of the following statements is accurate.
+2 punkter
+Bild utan bildtext
+The databaseservers can not reach the webservers over port 443.
+Both the subnets can communicate freely between one another without restrictions.
+Because of rule Https_443 communication between them is only allowed over port 443.
+Priority 65500 stops everything, so they won't be able to communicate at all
+In your azure setup you have over 40 virtual machines setup. A new security patch for the OS you are using is released. What do yo do?
+1 punkt
+Nothing, patching of the operating system as that is managed by Azure
+Initiate a process to plan patching all servers, as this is our responsibility
+What of the following scenarios is not supported for a Scale Set?
+2 punkter
+Change VM size of a specific instance
+Changing the amount of instances manually
+Changing the amount of instances running dynamically based on events
+Which of the following is a limitation in Azure storage account
+2 punkter
+Your name needs to be globally unique
+You can not change the keys of the storage account once created
+Your name needs to be unique within your subscription
+Your keys are automatically rotated every week for security reasons
+Is there a way for you to use custom domain names for Azure services? Example 915701.database.windows.net can be mydb.mydomain.com
+2 punkter
+Yes
+No
+Suppose you have two video files stored as blobs. One of the videos is business-critical and requires a replication policy that creates multiple copies across geographically diverse datacenters. The other video is non-critical, and a local replication policy is sufficient. Which of the following options would satisfy both data diversity and cost sensitivity consideration.
+2 punkter
+Create a single storage account that makes use of Local-redundant storage (LRS) and host both videos from here.
+Create a single storage account that makes use of Geo-redundant storage (GRS) and host both videos from here.
+Create a two storage accounts. The first account makes use of Geo-redundant storage (GRS) and hosts the business-critical video content. The second account makes use of Local-redundant storage (LRS) and hosts the non-critical video content.
+What technique does Docker containers implore to make them unaffected of changes to the host machine?
+2 punkter
+Layering to define what runtime and other dependencies it has
+Analysis of the VM capabilities to identify if it can run or not
+It can communicate with Azure to check for compatibility
+You are running an Azure Kubernetes service in your cloud environment. Which of the following components will be contributing to your monthly azure charge?
+2 punkter
+The master nodes
+The deployed pods
+The worker nodes
+When setting up an SQL server as a service in Azure you get point in time restore on this resource as a default option for you to use. What statement about backup is not true for this service
+2 punkter
+You can setup Long term retention to store a full back up from a specific week to be stored up to 10 years
+You will automatically get database backups pushed to a storage account when they are taken
+You can increase the time that the point in time restore is to be kept up to 35 days
+Suppose you create a new VM with a single OS disk and a single data disk. You use the default options when you create the VM. You don't have an Azure Key Vault set up in your subscription. Which option most accurately describes the encryption state of those disks?
+2 punkter
+Both disks are unencrypted.
+The OS disk is encrypted using Storage Service Encryption (SSE). The data disk is unencrypted.
+Both disks are encrypted using Storage Service Encryption.
+True or false: all Azure data storage options include automatic backup of data?
+2 punkter
+True
+False
+At the office where you work there are over 200 engineers working with all kinds of software development. Given this situation you can not help every single one of them all the time, so you decide to take help of the Azure capabilities that you have. Describe what capabilities you would use and how to? Enforce them to tag their resources with cost center. Make sure they only have access to their own stuff and don't break others.
+5 punkter
+En kopia av dina svar skickas med e-post till 90dankro@gafe.molndal.se.
+Sidan 1 av 1
+Skicka aldrig lösenord med Google Formulär
+Formuläret skapades på Skolförvaltningen och Utbildningsförvaltningen Mölndal Stad. Anmäl otillåten användning
+Google Formulär

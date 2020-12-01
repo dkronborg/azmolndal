@@ -1,0 +1,24 @@
+{
+    "policyParameters": {
+        "metadata": {
+            "comment": "Policy parameters should be provided as an object"
+        },
+        "value": {
+            "allowedLocations": [
+                "North Europe",
+                "West Europe",
+                "UK South",
+                "UK West",
+                "France Central",
+                "France South",
+                "Switzerland North",
+                "Switzerland West",
+                "Germany North",
+                "Germany West Central",
+                "Norway West",
+                "Norway East"
+            ]
+        }
+    }
+}
+
