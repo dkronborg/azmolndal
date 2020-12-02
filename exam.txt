@@ -34,6 +34,8 @@ Created a storage account with a file share that is also mounted on the VM (hard
 
 Additionaly I created a key valut to store passwords. The two passwords that are in there right now are VM password and database password. This is simply to discourage the user of simple passwords such as admin123.
 
+Remote access to the VM is currently unavailable. In order to access the VM either open port 22 (only recommended for test) or set up Azure Bastion. Bastion can give you access to VMs without exposing them to the internet.  
+
 As this excercise was meant to "set up the initial components" I have only created a single VM for the application to run on. To scale this solution I would recommend creating a scale set. The scale set will increse the number of VMs running the application when demand grows and decrese the number when demand slackens. As a front for the application I would recommend an Application Gateway. Application Gateway routes traffic to a pool of web servers based on the URL of a request. The pool of web servers in this case is the scale set. 
 
 
