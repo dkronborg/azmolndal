@@ -1,0 +1,29 @@
+az group create --name student08-policy-deploy --location westeurope
+
+az deployment group validate \
+ --resource-group student08-policy-deploy \
+ --template-file './allowed_locations.json' \
+ --parameters './allowed_locations.parameters.json' \
+ --debug
+
+az deployment group create \
+--resource-group student08-policy-deploy \
+ --template-file './allowed_locations.json' \
+ --parameters './allowed_locations.parameters.json' \
+ --query "properties.outputs" \
+ --output jsonc
+
+az group create --name student08-deploy-variables --location westeurope
+
+az deployment group validate \
+--resource-group student08-deploy-variables \
+ --template-file './automation.json' \
+ --parameters './automation.parameters.json' \
+ --debug
+
+az deployment group create --resource-group student08-deploy-variables \
+ --template-file './automation.json' \
+ --parameters './automation.parameters.json' \
+ --query "properties.outputs" \
+ --output jsonc
+
